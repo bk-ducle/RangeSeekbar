@@ -3,5 +3,9 @@
     <declare-styleable name="RangeSeekbar">
         <attr name="tick_end" format="integer" />
         <attr name="tick_start" format="integer" />
+        <attr name="normal_thumb_color" format="color" />
+        <attr name="press_thumb_color" format="color" />
+        <attr name="front_line_color" format="color" />
+        <attr name="background_line_color" format="color" />
     </declare-styleable>
 </resources>

@@ -17,13 +17,17 @@ public class RangeSeekbar extends View {
 
     private Thumb mLeftThumb;
     private Thumb mRightThumb;
-    private Line mLine;
-    private Line mLineDame;
+    private Line mBackgroundLine;
+    private Line mFrontLine;
 
     private int mPadding = 30;
     private Integer mTickStart;
     private Integer mTickEnd;
     private boolean isFirst = true;
+    private int mNormalThumbColor;
+    private int mPressThumbColor;
+    private int mFrontLineColor;
+    private int mBackgroundLineColor;
 
     private OnRangeBarChangeListener mListener;
 
@@ -64,6 +68,14 @@ public class RangeSeekbar extends View {
         try {
             mTickStart = ta.getInteger(R.styleable.RangeSeekbar_tick_start, 0);
             mTickEnd = ta.getInteger(R.styleable.RangeSeekbar_tick_end, 100);
+            mNormalThumbColor = ta.getColor(R.styleable.RangeSeekbar_normal_thumb_color
+                    , getResources().getColor(R.color.colorPrimary));
+            mPressThumbColor = ta.getColor(R.styleable.RangeSeekbar_press_thumb_color
+                    , getResources().getColor(R.color.colorAccent));
+            mFrontLineColor = ta.getColor(R.styleable.RangeSeekbar_front_line_color
+                    , getResources().getColor(R.color.colorPrimary));
+            mBackgroundLineColor = ta.getColor(R.styleable.RangeSeekbar_background_line_color
+                    , getResources().getColor(android.R.color.darker_gray));
             Integer tickCount = mTickEnd - mTickStart;
             if (tickCount > 1) {
                 mTickCount = tickCount;
@@ -95,39 +107,63 @@ public class RangeSeekbar extends View {
     }
 
     public float getCoordinateIndex(int index) {
-        return 30 + index * mLine.getTickDistance();
+        return 30 + index * mBackgroundLine.getTickDistance();
     }
 
-    public void setLeftIndex(int mLeftIndex) {
-        this.mLeftIndex = mLeftIndex = mTickStart;
+    public void setLeftIndex(int leftIndex) {
+        if (!isFirst) {
+            this.isFirst = true;
+        }
+        this.mLeftIndex = leftIndex - mTickStart;
     }
 
     public int getRightIndex() {
         return mRightIndex;
     }
 
-    public void setRightIndex(int mRightIndex) {
-        this.mRightIndex = mRightIndex - mTickStart;
+    public void setRightIndex(int rightIndex) {
+        if (!isFirst) {
+            this.isFirst = true;
+        }
+        this.mRightIndex = rightIndex - mTickStart;
+    }
+
+    public void setFrontLineColor(int color) {
+        if (!isFirst) {
+            this.isFirst = true;
+        }
+        this.mFrontLineColor = color;
+    }
+
+    public void setBackgroundLineColor(int color) {
+        if (!isFirst) {
+            this.isFirst = true;
+        }
+        this.mBackgroundLineColor = color;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (isFirst) {
-            mLine.setWHP(canvas.getWidth(), canvas.getHeight(), mPadding);
-            mLine.setTick(mTickStart, mTickEnd);
-            mLine.setPaint(10f, getContext().getResources().getColor(R.color.gray));
+            mBackgroundLine.setWHP(canvas.getWidth(), canvas.getHeight(), mPadding);
+            mBackgroundLine.setTick(mTickStart, mTickEnd);
+            mBackgroundLine.setPaint(10f, mBackgroundLineColor);
+
             mLeftThumb.setX(getCoordinateIndex(mLeftIndex));
             mLeftThumb.setY(canvas.getHeight() / 2);
+
             mRightThumb.setX(getCoordinateIndex(mRightIndex));
             mRightThumb.setY(canvas.getHeight() / 2);
-            mLineDame.setLeftX(mLeftThumb.getX());
-            mLineDame.setRightX(mRightThumb.getX());
-            mLineDame.setY(canvas.getHeight() / 2);
+
+            mFrontLine.setLeftX(mLeftThumb.getX());
+            mFrontLine.setRightX(mRightThumb.getX());
+            mFrontLine.setY(canvas.getHeight() / 2);
+
             isFirst = false;
         }
-        mLine.draw(canvas, 0);
-        mLineDame.drawArea(canvas);
+        mBackgroundLine.draw(canvas, 0);
+        mFrontLine.drawArea(canvas);
 
         mLeftThumb.draw(canvas);
         mRightThumb.draw(canvas);
@@ -155,11 +191,11 @@ public class RangeSeekbar extends View {
     private void onActionMove(float x) {
         boolean handle = false;
         if (mLeftThumb.isPress()) {
-            mLineDame.setLeftX(x);
+            mFrontLine.setLeftX(x);
             moveThumb(mLeftThumb, x);
             handle = true;
         } else if ((mRightThumb.isPress())) {
-            mLineDame.setRightX(x);
+            mFrontLine.setRightX(x);
             moveThumb(mRightThumb, x);
             handle = true;
         }
@@ -170,8 +206,8 @@ public class RangeSeekbar extends View {
                 mRightThumb = temp;
             }
 
-            int leftIndex = mLine.getNearestTickIndex(mLeftThumb);
-            int rightIndex = mLine.getNearestTickIndex(mRightThumb);
+            int leftIndex = mBackgroundLine.getNearestTickIndex(mLeftThumb);
+            int rightIndex = mBackgroundLine.getNearestTickIndex(mRightThumb);
 
             if (leftIndex != mLeftIndex || rightIndex != mRightIndex) {
                 mLeftIndex = leftIndex;
@@ -180,18 +216,14 @@ public class RangeSeekbar extends View {
                     mListener.onIndexChangeListener(this, mLeftIndex + mTickStart, mRightIndex + mTickStart);
                 }
             }
-
-
-//            mLineDame.setLeftX(getCoordinateIndex(mLeftIndex));
-//            mLineDame.setRightX(getCoordinateIndex(mRightIndex));
         }
     }
 
     private void moveThumb(Thumb thumb, float x) {
-        if (x > mLine.getRightX()) {
-            thumb.setX(mLine.getRightX());
-        } else if (x < mLine.getLeftX()) {
-            thumb.setX(mLine.getLeftX());
+        if (x > mBackgroundLine.getRightX()) {
+            thumb.setX(mBackgroundLine.getRightX());
+        } else if (x < mBackgroundLine.getLeftX()) {
+            thumb.setX(mBackgroundLine.getLeftX());
         } else {
             thumb.setX(x);
         }
@@ -199,8 +231,8 @@ public class RangeSeekbar extends View {
     }
 
     private void onActionUp(float x, float y) {
-        mLineDame.setLeftX(getCoordinateIndex(mLeftIndex));
-        mLineDame.setRightX(getCoordinateIndex(mRightIndex));
+        mFrontLine.setLeftX(getCoordinateIndex(mLeftIndex));
+        mFrontLine.setRightX(getCoordinateIndex(mRightIndex));
         if (mLeftThumb.isPress()) {
             releaseThump(mLeftThumb);
         } else if (mRightThumb.isPress()) {
@@ -209,7 +241,7 @@ public class RangeSeekbar extends View {
     }
 
     private void releaseThump(Thumb thumb) {
-        float nearestTickX = mLine.getNearestTickCoordinate(thumb);
+        float nearestTickX = mBackgroundLine.getNearestTickCoordinate(thumb);
         thumb.setX(nearestTickX);
         thumb.release();
         invalidate();
@@ -238,11 +270,11 @@ public class RangeSeekbar extends View {
     }
 
     private void createLine() {
-        mLine = new Line();
+        mBackgroundLine = new Line();
     }
 
     private void createLineDam() {
-        mLineDame = new Line(mLeftThumb.getX(), mRightThumb.getX(), 10f
+        mFrontLine = new Line(mLeftThumb.getX(), mRightThumb.getX(), 10f
                 , getContext().getResources().getColor(R.color.primary));
     }
 

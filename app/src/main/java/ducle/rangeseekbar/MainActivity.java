@@ -15,7 +15,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         mRangeSeebar.setLeftIndex(2);
-        mRangeSeebar.setRightIndex(4);
+        mRangeSeebar.setRightIndex(3);
+        mRangeSeebar.setBackgroundLineColor(getResources().getColor(R.color.gray));
         mRangeSeebar.setOnRangeBarChangeListener(new RangeSeekbar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeSeekbar rangeBar, int leftThumbIndex, int rightThumbIndex) {

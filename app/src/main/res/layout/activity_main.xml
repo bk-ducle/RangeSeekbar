@@ -11,6 +11,10 @@
         android:id="@+id/rs"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        app:background_line_color="@android:color/holo_red_light"
+        app:front_line_color="@color/colorPrimary"
+        app:normal_thumb_color="@android:color/holo_green_light"
+        app:press_thumb_color="@android:color/holo_red_light"
         app:tick_end="4"
         app:tick_start="1" />
 
