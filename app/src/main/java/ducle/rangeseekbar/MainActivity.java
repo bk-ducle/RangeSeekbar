@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         mRangeSeebar.setLeftIndex(2);
         mRangeSeebar.setRightIndex(3);
         mRangeSeebar.setBackgroundLineColor(getResources().getColor(R.color.gray));
+        mRangeSeebar.setFrontLineColor(getResources().getColor(android.R.color.holo_red_light));
         mRangeSeebar.setOnRangeBarChangeListener(new RangeSeekbar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeSeekbar rangeBar, int leftThumbIndex, int rightThumbIndex) {

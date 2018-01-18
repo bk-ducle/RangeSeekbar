@@ -156,6 +156,7 @@ public class RangeSeekbar extends View {
             mRightThumb.setX(getCoordinateIndex(mRightIndex));
             mRightThumb.setY(canvas.getHeight() / 2);
 
+            mFrontLine.setPaint(10f, mFrontLineColor);
             mFrontLine.setLeftX(mLeftThumb.getX());
             mFrontLine.setRightX(mRightThumb.getX());
             mFrontLine.setY(canvas.getHeight() / 2);
@@ -274,8 +275,7 @@ public class RangeSeekbar extends View {
     }
 
     private void createLineDam() {
-        mFrontLine = new Line(mLeftThumb.getX(), mRightThumb.getX(), 10f
-                , getContext().getResources().getColor(R.color.primary));
+        mFrontLine = new Line();
     }
 
     public int getTickStart() {
