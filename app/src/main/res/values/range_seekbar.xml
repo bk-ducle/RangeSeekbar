@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RangeSeekbar">
+        <attr name="tick_end" format="integer" />
+        <attr name="tick_start" format="integer" />
+    </declare-styleable>
+</resources>
