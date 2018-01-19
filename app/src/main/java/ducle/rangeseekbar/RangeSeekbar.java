@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -30,6 +29,7 @@ public class RangeSeekbar extends View {
     private int mFrontLineColor;
     private int mBackgroundLineColor;
     private float mBackgroundLineWidth;
+    private float mFrontLineWidth;
 
     private OnRangeBarChangeListener mListener;
 
@@ -79,6 +79,7 @@ public class RangeSeekbar extends View {
             mBackgroundLineColor = ta.getColor(R.styleable.RangeSeekbar_background_line_color
                     , getResources().getColor(android.R.color.darker_gray));
             mBackgroundLineWidth = ta.getDimension(R.styleable.RangeSeekbar_background_line_width, 10f);
+            mFrontLineWidth = ta.getDimension(R.styleable.RangeSeekbar_front_line_width, 10f);
             Integer tickCount = mTickEnd - mTickStart;
             if (tickCount > 1) {
                 mTickCount = tickCount;
@@ -175,7 +176,7 @@ public class RangeSeekbar extends View {
     /**
      * set color for thumb when is's in press state
      */
-    public void setPressThumbcolor(int color) {
+    public void setPressThumbColor(int color) {
         changeToFirst();
         this.mPressThumbColor = color;
     }
@@ -183,6 +184,11 @@ public class RangeSeekbar extends View {
     public void setBackgroundLineWidth(float width) {
         changeToFirst();
         this.mBackgroundLineWidth = width;
+    }
+
+    public void setFrontLineWidth(float width) {
+        changeToFirst();
+        this.mFrontLineWidth = width;
     }
 
     private void changeToFirst() {
@@ -211,7 +217,7 @@ public class RangeSeekbar extends View {
             mRightThumb.setNormalColor(mNormalThumbColor);
             mRightThumb.setPressColor(mPressThumbColor);
 
-            mFrontLine.setPaint(10f, mFrontLineColor);
+            mFrontLine.setPaint(mFrontLineWidth, mFrontLineColor);
             mFrontLine.setLeftX(mLeftThumb.getX());
             mFrontLine.setRightX(mRightThumb.getX());
             mFrontLine.setY(canvas.getHeight() / 2);
