@@ -23,6 +23,7 @@ public class RangeSeekbar extends View {
     private int mPadding = 30;
     private Integer mTickStart;
     private Integer mTickEnd;
+    // param describe : first time draw
     private boolean isFirst = true;
     private int mNormalThumbColor;
     private int mPressThumbColor;
@@ -30,6 +31,7 @@ public class RangeSeekbar extends View {
     private int mBackgroundLineColor;
     private float mBackgroundLineWidth;
     private float mFrontLineWidth;
+    private float mThumbRadius;
 
     private OnRangeBarChangeListener mListener;
 
@@ -41,6 +43,10 @@ public class RangeSeekbar extends View {
     public RangeSeekbar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
+    }
+
+    public RangeSeekbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     @Nullable
@@ -80,6 +86,7 @@ public class RangeSeekbar extends View {
                     , getResources().getColor(android.R.color.darker_gray));
             mBackgroundLineWidth = ta.getDimension(R.styleable.RangeSeekbar_background_line_width, 10f);
             mFrontLineWidth = ta.getDimension(R.styleable.RangeSeekbar_front_line_width, 10f);
+            mThumbRadius = ta.getDimension(R.styleable.RangeSeekbar_thumb_radius, 25f);
             Integer tickCount = mTickEnd - mTickStart;
             if (tickCount > 1) {
                 mTickCount = tickCount;
@@ -97,36 +104,52 @@ public class RangeSeekbar extends View {
         createFrontLine();
     }
 
+    /**
+     * create left thumb and right thumb
+     */
     private void createThumb() {
         mLeftThumb = new Thumb();
         mRightThumb = new Thumb();
     }
 
+    /**
+     * create background line
+     */
     private void createBackgroundLine() {
         mBackgroundLine = new Line();
     }
 
+    /**
+     * create front line
+     */
     private void createFrontLine() {
         mFrontLine = new Line();
     }
 
-    public RangeSeekbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-
+    /**
+     * set listener when range seek bar change
+     */
     public void setOnRangeBarChangeListener(RangeSeekbar.OnRangeBarChangeListener listener) {
         mListener = listener;
     }
 
+    /**
+     * get left index of range seek bar
+     */
     public int getLeftIndex() {
         return mLeftIndex;
     }
 
+    /**
+     * get coordinate in a position index
+     */
     public float getCoordinateIndex(int index) {
         return 30 + index * mBackgroundLine.getTickDistance();
     }
 
+    /**
+     * set left index of range seek bar
+     */
     public void setLeftIndex(int leftIndex) {
         changeToFirst();
         if (leftIndex < mTickStart || leftIndex > mTickEnd) {
@@ -136,10 +159,16 @@ public class RangeSeekbar extends View {
         }
     }
 
+    /**
+     * get right index of range seek bar
+     */
     public int getRightIndex() {
         return mRightIndex;
     }
 
+    /**
+     * set right index of range seek bar
+     */
     public void setRightIndex(int rightIndex) {
         changeToFirst();
         if (rightIndex < mTickStart || rightIndex > mTickEnd) {
@@ -181,16 +210,33 @@ public class RangeSeekbar extends View {
         this.mPressThumbColor = color;
     }
 
+    /**
+     * set width for background line
+     */
     public void setBackgroundLineWidth(float width) {
         changeToFirst();
         this.mBackgroundLineWidth = width;
     }
 
+    /**
+     * set width for front line
+     */
     public void setFrontLineWidth(float width) {
         changeToFirst();
         this.mFrontLineWidth = width;
     }
 
+    /**
+     * set radius for thumb
+     */
+    public void setThumbRadius(float radius) {
+        changeToFirst();
+        this.mThumbRadius = radius;
+    }
+
+    /**
+     * set isFirst = true
+     */
     private void changeToFirst() {
         if (!isFirst) {
             this.isFirst = true;
@@ -201,27 +247,10 @@ public class RangeSeekbar extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (isFirst) {
-            mBackgroundLine.setWHP(canvas.getWidth(), canvas.getHeight(), mPadding);
-            mBackgroundLine.setTick(mTickStart, mTickEnd);
-            mBackgroundLine.setPaint(mBackgroundLineWidth, mBackgroundLineColor);
-
-            mLeftThumb.setX(getCoordinateIndex(mLeftIndex));
-            mLeftThumb.setY(canvas.getHeight() / 2);
-            mLeftThumb.setRadius(25f);
-            mLeftThumb.setNormalColor(mNormalThumbColor);
-            mLeftThumb.setPressColor(mPressThumbColor);
-
-            mRightThumb.setX(getCoordinateIndex(mRightIndex));
-            mRightThumb.setY(canvas.getHeight() / 2);
-            mRightThumb.setRadius(25f);
-            mRightThumb.setNormalColor(mNormalThumbColor);
-            mRightThumb.setPressColor(mPressThumbColor);
-
-            mFrontLine.setPaint(mFrontLineWidth, mFrontLineColor);
-            mFrontLine.setLeftX(mLeftThumb.getX());
-            mFrontLine.setRightX(mRightThumb.getX());
-            mFrontLine.setY(canvas.getHeight() / 2);
-
+            setUpBackgroundLine(canvas);
+            setUpLeftThumb(canvas);
+            setUpRightThumb(canvas);
+            setUpFrontLine(canvas);
             isFirst = false;
         }
         mBackgroundLine.draw(canvas);
@@ -229,6 +258,47 @@ public class RangeSeekbar extends View {
 
         mLeftThumb.draw(canvas);
         mRightThumb.draw(canvas);
+    }
+
+    /**
+     * set up the background line
+     */
+    private void setUpBackgroundLine(Canvas canvas) {
+        mBackgroundLine.setWHP(canvas.getWidth(), canvas.getHeight(), mPadding);
+        mBackgroundLine.setTick(mTickStart, mTickEnd);
+        mBackgroundLine.setPaint(mBackgroundLineWidth, mBackgroundLineColor);
+    }
+
+    /**
+     * set up the left thumb
+     */
+    private void setUpLeftThumb(Canvas canvas) {
+        mLeftThumb.setX(getCoordinateIndex(mLeftIndex));
+        mLeftThumb.setY(canvas.getHeight() / 2);
+        mLeftThumb.setRadius(mThumbRadius);
+        mLeftThumb.setNormalColor(mNormalThumbColor);
+        mLeftThumb.setPressColor(mPressThumbColor);
+    }
+
+    /**
+     * set up the right thumb
+     */
+    private void setUpRightThumb(Canvas canvas) {
+        mRightThumb.setX(getCoordinateIndex(mRightIndex));
+        mRightThumb.setY(canvas.getHeight() / 2);
+        mRightThumb.setRadius(mThumbRadius);
+        mRightThumb.setNormalColor(mNormalThumbColor);
+        mRightThumb.setPressColor(mPressThumbColor);
+    }
+
+    /**
+     * set up the front line
+     */
+    private void setUpFrontLine(Canvas canvas) {
+        mFrontLine.setPaint(mFrontLineWidth, mFrontLineColor);
+        mFrontLine.setLeftX(mLeftThumb.getX());
+        mFrontLine.setRightX(mRightThumb.getX());
+        mFrontLine.setY(canvas.getHeight() / 2);
     }
 
     @Override
