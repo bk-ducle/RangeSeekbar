@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         mRangeSeebar.setNormalThumbColor(getResources().getColor(R.color.primary));
         mRangeSeebar.setPressThumbColor(getResources().getColor(R.color.colorAccent));
         mRangeSeebar.setBackgroundLineWidth(10f);
-        mRangeSeebar.setFrontLineWidth(12f);
+        mRangeSeebar.setFrontLineWidth(15f);
+        mRangeSeebar.setThumbRadius(25f);
         mRangeSeebar.setOnRangeBarChangeListener(new RangeSeekbar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeSeekbar rangeBar, int leftThumbIndex, int rightThumbIndex) {

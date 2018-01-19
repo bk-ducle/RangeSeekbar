@@ -17,33 +17,6 @@ class Thumb {
         mPressedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
-    public Thumb(float mX, float mThumbRadius, int mColorNormal, int mColorPressed) {
-        this.mTargetRadius = 50;
-        this.mX = mX;
-        this.mThumbRadius = mThumbRadius;
-
-        mNormalPaint = new Paint();
-        mNormalPaint.setColor(mColorNormal);
-        mNormalPaint.setAntiAlias(true);
-
-        mPressedPaint = new Paint();
-        mPressedPaint.setColor(mColorPressed);
-        mPressedPaint.setAntiAlias(true);
-    }
-
-    public Thumb(float mThumbRadius, int mColorNormal, int mColorPressed) {
-        this.mTargetRadius = 50;
-        this.mThumbRadius = mThumbRadius;
-
-        mNormalPaint = new Paint();
-        mNormalPaint.setColor(mColorNormal);
-        mNormalPaint.setAntiAlias(true);
-
-        mPressedPaint = new Paint();
-        mPressedPaint.setColor(mColorPressed);
-        mPressedPaint.setAntiAlias(true);
-    }
-
     public void setY(float y) {
         this.mY = y;
     }
