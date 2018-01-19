@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -88,9 +89,22 @@ public class RangeSeekbar extends View {
         } finally {
             ta.recycle();
         }
-        createLine();
+        createBackgroundLine();
         createThumb();
-        createLineDam();
+        createFrontLine();
+    }
+
+    private void createThumb() {
+        mLeftThumb = new Thumb();
+        mRightThumb = new Thumb();
+    }
+
+    private void createBackgroundLine() {
+        mBackgroundLine = new Line();
+    }
+
+    private void createFrontLine() {
+        mFrontLine = new Line();
     }
 
     public RangeSeekbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -114,7 +128,11 @@ public class RangeSeekbar extends View {
         if (!isFirst) {
             this.isFirst = true;
         }
-        this.mLeftIndex = leftIndex - mTickStart;
+        if (leftIndex < mTickStart || leftIndex > mTickEnd) {
+            this.mLeftIndex = 0;
+        } else {
+            this.mLeftIndex = leftIndex - mTickStart;
+        }
     }
 
     public int getRightIndex() {
@@ -125,9 +143,16 @@ public class RangeSeekbar extends View {
         if (!isFirst) {
             this.isFirst = true;
         }
-        this.mRightIndex = rightIndex - mTickStart;
+        if (rightIndex < mTickStart || rightIndex > mTickEnd) {
+            this.mRightIndex = mTickEnd - mTickStart;
+        } else {
+            this.mRightIndex = rightIndex - mTickStart;
+        }
     }
 
+    /**
+     * set color for front line
+     */
     public void setFrontLineColor(int color) {
         if (!isFirst) {
             this.isFirst = true;
@@ -135,11 +160,28 @@ public class RangeSeekbar extends View {
         this.mFrontLineColor = color;
     }
 
+    /**
+     * set color for background line
+     */
     public void setBackgroundLineColor(int color) {
         if (!isFirst) {
             this.isFirst = true;
         }
         this.mBackgroundLineColor = color;
+    }
+
+    /**
+     * set color for thumb when it's in normal state
+     */
+    public void setNormalThumbColor(int color) {
+        this.mNormalThumbColor = color;
+    }
+
+    /**
+     * set color for thumb when is's in press state
+     */
+    public void setPressThumbcolor(int color) {
+        this.mPressThumbColor = color;
     }
 
     @Override
@@ -152,9 +194,15 @@ public class RangeSeekbar extends View {
 
             mLeftThumb.setX(getCoordinateIndex(mLeftIndex));
             mLeftThumb.setY(canvas.getHeight() / 2);
+            mLeftThumb.setRadius(25f);
+            mLeftThumb.setNormalColor(mNormalThumbColor);
+            mLeftThumb.setPressColor(mPressThumbColor);
 
             mRightThumb.setX(getCoordinateIndex(mRightIndex));
             mRightThumb.setY(canvas.getHeight() / 2);
+            mRightThumb.setRadius(25f);
+            mRightThumb.setNormalColor(mNormalThumbColor);
+            mRightThumb.setPressColor(mPressThumbColor);
 
             mFrontLine.setPaint(10f, mFrontLineColor);
             mFrontLine.setLeftX(mLeftThumb.getX());
@@ -179,9 +227,11 @@ public class RangeSeekbar extends View {
                 return true;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                Log.d("xxx", "onTouchEvent: up");
                 onActionUp(event.getX(), event.getY());
                 return true;
             case MotionEvent.ACTION_MOVE:
+                Log.d("xxx", "onTouchEvent: move");
                 onActionMove(event.getX());
                 return true;
             default:
@@ -191,6 +241,7 @@ public class RangeSeekbar extends View {
 
     private void onActionMove(float x) {
         boolean handle = false;
+        Log.d("xxx", "onActionMove: " + mLeftThumb.isPress() + "------" + mRightThumb.isPress());
         if (mLeftThumb.isPress()) {
             mFrontLine.setLeftX(x);
             moveThumb(mLeftThumb, x);
@@ -254,28 +305,12 @@ public class RangeSeekbar extends View {
         } else if (!mRightThumb.isPress() && mRightThumb.isInTargetZone(x, y)) {
             pressThumb(mRightThumb);
         }
+        Log.d("xxx", "onActionDown: " + !mRightThumb.isPress() + "++++++" + mRightThumb.isInTargetZone(x, y));
     }
 
     private void pressThumb(Thumb thumb) {
         thumb.press();
         invalidate();
-    }
-
-    private void createThumb() {
-        mLeftThumb = new Thumb(getCoordinateIndex(mLeftIndex), 25
-                , getContext().getResources().getColor(R.color.primary)
-                , getContext().getResources().getColor(android.R.color.holo_green_light));
-        mRightThumb = new Thumb(25
-                , getContext().getResources().getColor(R.color.primary)
-                , getContext().getResources().getColor(android.R.color.holo_green_light));
-    }
-
-    private void createLine() {
-        mBackgroundLine = new Line();
-    }
-
-    private void createLineDam() {
-        mFrontLine = new Line();
     }
 
     public int getTickStart() {

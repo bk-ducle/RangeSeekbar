@@ -14,10 +14,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        mRangeSeebar.setLeftIndex(2);
-        mRangeSeebar.setRightIndex(3);
+        mRangeSeebar.setLeftIndex(5);
+        mRangeSeebar.setRightIndex(10);
         mRangeSeebar.setBackgroundLineColor(getResources().getColor(R.color.gray));
         mRangeSeebar.setFrontLineColor(getResources().getColor(android.R.color.holo_red_light));
+        mRangeSeebar.setNormalThumbColor(getResources().getColor(R.color.primary));
+        mRangeSeebar.setPressThumbcolor(getResources().getColor(R.color.colorAccent));
         mRangeSeebar.setOnRangeBarChangeListener(new RangeSeekbar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeSeekbar rangeBar, int leftThumbIndex, int rightThumbIndex) {

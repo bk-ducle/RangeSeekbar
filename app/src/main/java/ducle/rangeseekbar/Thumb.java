@@ -4,52 +4,52 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 class Thumb {
-    private float mTargetRadius;
+    private float mTargetRadius = 50;
     private boolean mIsPress = false;
     private float mX;
     private float mY;
     private float mThumbRadius;
-    private int mColorNormal;
-    private int mColorPressed;
-    private Paint mPaintNormal;
-    private Paint mPaintPressed;
+    private Paint mNormalPaint;
+    private Paint mPressedPaint;
 
     public Thumb() {
+        mNormalPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPressedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     public Thumb(float mX, float mThumbRadius, int mColorNormal, int mColorPressed) {
         this.mTargetRadius = 50;
         this.mX = mX;
         this.mThumbRadius = mThumbRadius;
-        this.mColorNormal = mColorNormal;
-        this.mColorPressed = mColorPressed;
 
-        mPaintNormal = new Paint();
-        mPaintNormal.setColor(mColorNormal);
-        mPaintNormal.setAntiAlias(true);
+        mNormalPaint = new Paint();
+        mNormalPaint.setColor(mColorNormal);
+        mNormalPaint.setAntiAlias(true);
 
-        mPaintPressed = new Paint();
-        mPaintPressed.setColor(mColorPressed);
-        mPaintPressed.setAntiAlias(true);
+        mPressedPaint = new Paint();
+        mPressedPaint.setColor(mColorPressed);
+        mPressedPaint.setAntiAlias(true);
     }
 
     public Thumb(float mThumbRadius, int mColorNormal, int mColorPressed) {
         this.mTargetRadius = 50;
         this.mThumbRadius = mThumbRadius;
-        this.mColorNormal = mColorNormal;
-        this.mColorPressed = mColorPressed;
 
-        mPaintNormal = new Paint();
-        mPaintNormal.setColor(mColorNormal);
-        mPaintNormal.setAntiAlias(true);
+        mNormalPaint = new Paint();
+        mNormalPaint.setColor(mColorNormal);
+        mNormalPaint.setAntiAlias(true);
 
-        mPaintPressed = new Paint();
-        mPaintPressed.setColor(mColorPressed);
-        mPaintPressed.setAntiAlias(true);
+        mPressedPaint = new Paint();
+        mPressedPaint.setColor(mColorPressed);
+        mPressedPaint.setAntiAlias(true);
     }
 
     public void setY(float y) {
         this.mY = y;
+    }
+
+    public float getY() {
+        return mY;
     }
 
     public float getX() {
@@ -58,6 +58,18 @@ class Thumb {
 
     public void setX(float x) {
         this.mX = x;
+    }
+
+    public void setNormalColor(int color) {
+        mNormalPaint.setColor(color);
+    }
+
+    public void setPressColor(int color) {
+        mPressedPaint.setColor(color);
+    }
+
+    public void setRadius(float radius) {
+        this.mThumbRadius = radius;
     }
 
     public boolean isPress() {
@@ -73,15 +85,14 @@ class Thumb {
     }
 
     public boolean isInTargetZone(float x, float y) {
-
         return Math.abs(x - mX) <= mTargetRadius && Math.abs(y - mY) <= mTargetRadius;
     }
 
     public void draw(Canvas canvas) {
         if (mIsPress) {
-            canvas.drawCircle(mX, mY, mThumbRadius, mPaintPressed);
+            canvas.drawCircle(mX, mY, mThumbRadius, mPressedPaint);
         } else {
-            canvas.drawCircle(mX, mY, mThumbRadius, mPaintNormal);
+            canvas.drawCircle(mX, mY, mThumbRadius, mNormalPaint);
         }
     }
 }

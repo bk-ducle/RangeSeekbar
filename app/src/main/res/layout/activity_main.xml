@@ -15,8 +15,8 @@
         app:front_line_color="@color/colorPrimary"
         app:normal_thumb_color="@android:color/holo_green_light"
         app:press_thumb_color="@android:color/holo_red_light"
-        app:tick_end="4"
-        app:tick_start="1" />
+        app:tick_end="20"
+        app:tick_start="5"/>
 
     <TextView
         android:id="@+id/tvKhoangCho"
