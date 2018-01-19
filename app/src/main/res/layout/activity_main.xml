@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="ducle.rangeseekbar.MainActivity">
 
@@ -16,7 +16,8 @@
         app:normal_thumb_color="@android:color/holo_green_light"
         app:press_thumb_color="@android:color/holo_red_light"
         app:tick_end="20"
-        app:tick_start="5"/>
+        app:background_line_width="15dp"
+        app:tick_start="5" />
 
     <TextView
         android:id="@+id/tvKhoangCho"

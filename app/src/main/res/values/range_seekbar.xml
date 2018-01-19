@@ -7,5 +7,6 @@
         <attr name="press_thumb_color" format="color" />
         <attr name="front_line_color" format="color" />
         <attr name="background_line_color" format="color" />
+        <attr name="background_line_width" format="dimension" />
     </declare-styleable>
 </resources>
