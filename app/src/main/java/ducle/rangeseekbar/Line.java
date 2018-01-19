@@ -39,16 +39,6 @@ public class Line {
         mPaint.setAntiAlias(true);
     }
 
-    public Line(float thumbLeftX, float thumbRightX, float weight, int color) {
-        mLeftX = thumbLeftX;
-        mRightX = thumbRightX;
-
-        mPaint = new Paint();
-        mPaint.setStrokeWidth(weight);
-        mPaint.setColor(color);
-        mPaint.setAntiAlias(true);
-    }
-
     public void setY(float y) {
         this.mY = y;
     }
