@@ -267,10 +267,8 @@ public class RangeSeekbar extends View {
                 mLeftThumb = mRightThumb;
                 mRightThumb = temp;
             }
-
             int leftIndex = mBackgroundLine.getNearestTickIndex(mLeftThumb);
             int rightIndex = mBackgroundLine.getNearestTickIndex(mRightThumb);
-
             if (leftIndex != mLeftIndex || rightIndex != mRightIndex) {
                 mLeftIndex = leftIndex;
                 mRightIndex = rightIndex;
@@ -278,6 +276,9 @@ public class RangeSeekbar extends View {
                     mListener.onIndexChangeListener(this, mLeftIndex + mTickStart, mRightIndex + mTickStart);
                 }
             }
+            mFrontLine.setLeftX(mLeftThumb.getX());
+            mFrontLine.setRightX(mRightThumb.getX());
+            invalidate();
         }
     }
 
@@ -289,7 +290,7 @@ public class RangeSeekbar extends View {
         } else {
             thumb.setX(x);
         }
-        invalidate();
+//        invalidate();
     }
 
     private void onActionUp(float x, float y) {
