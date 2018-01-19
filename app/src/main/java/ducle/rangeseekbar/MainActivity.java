@@ -20,10 +20,11 @@ public class MainActivity extends AppCompatActivity {
         mRangeSeebar.setFrontLineColor(getResources().getColor(android.R.color.holo_red_light));
         mRangeSeebar.setNormalThumbColor(getResources().getColor(R.color.primary));
         mRangeSeebar.setPressThumbcolor(getResources().getColor(R.color.colorAccent));
+        mRangeSeebar.setBackgroundLineWidth(10f);
         mRangeSeebar.setOnRangeBarChangeListener(new RangeSeekbar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeSeekbar rangeBar, int leftThumbIndex, int rightThumbIndex) {
-                mTv2.setText(leftThumbIndex + " - " + rightThumbIndex);
+                mTv2.setText(new StringBuffer().append(leftThumbIndex).append(" - ").append(rightThumbIndex));
             }
         });
     }

@@ -31,9 +31,9 @@ public class Line {
         mTickDistance = (mRightX - mLeftX) / mNumSegments;
     }
 
-    public  void setPaint(float weight, int color){
+    public void setPaint(float width, int color) {
         mPaint = new Paint();
-        mPaint.setStrokeWidth(weight);
+        mPaint.setStrokeWidth(width);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setColor(color);
         mPaint.setAntiAlias(true);
@@ -48,8 +48,9 @@ public class Line {
         mPaint.setColor(color);
         mPaint.setAntiAlias(true);
     }
-    public void setY(float y){
-        this.mY=y;
+
+    public void setY(float y) {
+        this.mY = y;
     }
 
     public float getLeftX() {
@@ -88,22 +89,7 @@ public class Line {
         return nearestCoordinate;
     }
 
-//    private void drawTick(Canvas canvas, int weightTick) {
-//        if (weightTick > 0) {
-//            for (int i = 0; i < mNumSegments; i++) {
-//                float x = i * mTickDistance + mLeftX;
-//                canvas.drawLine(x, mTickStartY, x, mTickEndY, mPaint);
-//            }
-//            canvas.drawLine(mRightX, mTickStartY, mRightX, mTickEndY, mPaint);
-//        }
-//    }
-
-    public void draw(Canvas canvas, int weightTick) {
-        canvas.drawLine(mLeftX, mY, mRightX, mY, mPaint);
-//        drawTick(canvas, weightTick);
-    }
-
-    public void drawArea(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.drawLine(mLeftX, mY, mRightX, mY, mPaint);
     }
 }
